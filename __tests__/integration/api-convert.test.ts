@@ -49,6 +49,31 @@ describe('POST /api/convert', () => {
     expect(res.body.value).toBeCloseTo(16.404199, 5)
   })
 
+  it('converts mass units via the same endpoint', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 10, from: 'pound', to: 'kilogram' })
+    expect(res.status).toBe(200)
+    expect(res.body).toEqual({
+      value: expect.any(Number),
+      from: 'pound',
+      to: 'kilogram',
+      unit: 'kg',
+    })
+    expect(res.body.value).toBeCloseTo(4.535924, 5)
+  })
+
+  it('converts 1 tonne to pounds (~2204.622622)', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 1, from: 'tonne', to: 'pound' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('lb')
+    expect(res.body.value).toBeCloseTo(2204.622622, 5)
+  })
+
   it('returns 400 for a missing field', async () => {
     const app = createApp()
     const res = await request(app).post('/api/convert').send({ value: 5, from: 'meter' })
