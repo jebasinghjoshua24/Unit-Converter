@@ -39,6 +39,15 @@ describe('CategoryConverter', () => {
     expect(within(select).getByRole('option', { name: 'Speed' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Energy' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Pressure' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Currency' })).toBeInTheDocument()
+  })
+
+  it('switches to the Currency converter when Currency is selected', () => {
+    render(<CategoryConverter />)
+    fireEvent.change(screen.getByLabelText(/category/i), { target: { value: 'currency' } })
+    const fromSelect = screen.getByLabelText(/from unit/i)
+    expect(fromSelect.querySelectorAll('option')).toHaveLength(8)
+    expect(within(fromSelect).getByRole('option', { name: 'US Dollar' })).toBeInTheDocument()
   })
 
   it('defaults to the Length converter', () => {

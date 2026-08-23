@@ -79,7 +79,7 @@ describe('conversion engine — length category', () => {
     })
 
     it('throws for an unknown category', () => {
-      expect(() => listUnits('currency' as Category)).toThrow()
+      expect(() => listUnits('data' as Category)).toThrow()
     })
   })
 })
@@ -364,5 +364,29 @@ describe('conversion engine — pressure', () => {
   })
   it('contains pressure category', () => {
     expect(listCategories()).toContain('pressure')
+  })
+})
+
+describe('conversion engine — currency category (dynamic rates)', () => {
+  it('lists currency in categories', () => {
+    expect(listCategories()).toContain('currency')
+  })
+
+  it('lists all 8 currency units as metadata', () => {
+    const units = listUnits('currency')
+    expect(units).toHaveLength(8)
+    const ids = units.map((u) => u.id)
+    expect(ids).toEqual(
+      expect.arrayContaining(['usd', 'eur', 'gbp', 'jpy', 'inr', 'cad', 'aud', 'chf']),
+    )
+  })
+
+  it('returns currency unit metadata by id', () => {
+    expect(getUnit('usd')).toMatchObject({ id: 'usd', symbol: 'USD' })
+    expect(getUnit('eur')).toMatchObject({ id: 'eur', symbol: 'EUR' })
+  })
+
+  it('refuses static convert for currency units (rates are dynamic)', () => {
+    expect(() => convert(100, 'usd', 'eur')).toThrow()
   })
 })

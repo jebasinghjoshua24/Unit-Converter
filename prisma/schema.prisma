@@ -13,6 +13,7 @@ model Unit {
   symbol          String
   category        UnitCategory
   description     String?
+  rate            Float?             // exchange rate relative to category base unit (currency)
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
   fromConversions ConversionFactor[] @relation("fromUnit")
