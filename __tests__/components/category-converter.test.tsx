@@ -28,11 +28,12 @@ describe('CategoryConverter', () => {
     cleanup()
   })
 
-  it('renders a category dropdown with Length and Mass options', () => {
+  it('renders a category dropdown with Length, Mass, and Temperature options', () => {
     render(<CategoryConverter />)
     const select = screen.getByLabelText(/category/i)
     expect(within(select).getByRole('option', { name: 'Length' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Mass' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Temperature' })).toBeInTheDocument()
   })
 
   it('defaults to the Length converter', () => {
@@ -47,6 +48,14 @@ describe('CategoryConverter', () => {
     const fromSelect = screen.getByLabelText(/from unit/i)
     expect(fromSelect.querySelectorAll('option')).toHaveLength(7)
     expect(within(fromSelect).getByRole('option', { name: 'Pound' })).toBeInTheDocument()
+  })
+
+  it('switches to the Temperature converter when Temperature is selected', () => {
+    render(<CategoryConverter />)
+    fireEvent.change(screen.getByLabelText(/category/i), { target: { value: 'temperature' } })
+    const fromSelect = screen.getByLabelText(/from unit/i)
+    expect(fromSelect.querySelectorAll('option')).toHaveLength(3)
+    expect(within(fromSelect).getByRole('option', { name: 'Celsius' })).toBeInTheDocument()
   })
 
   it('switches back to the Length converter', () => {

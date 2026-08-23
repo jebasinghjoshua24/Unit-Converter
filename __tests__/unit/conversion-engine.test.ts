@@ -161,3 +161,67 @@ describe('conversion engine — mass category', () => {
     })
   })
 })
+
+describe('conversion engine — temperature category (offset)', () => {
+  describe('convert', () => {
+    it('converts 0 °C to 32 °F', () => {
+      expect(convert(0, 'celsius', 'fahrenheit')).toBeCloseTo(32, 5)
+    })
+
+    it('converts 100 °C to 212 °F', () => {
+      expect(convert(100, 'celsius', 'fahrenheit')).toBeCloseTo(212, 5)
+    })
+
+    it('converts 32 °F to 0 °C', () => {
+      expect(convert(32, 'fahrenheit', 'celsius')).toBeCloseTo(0, 5)
+    })
+
+    it('converts 0 °C to 273.15 K', () => {
+      expect(convert(0, 'celsius', 'kelvin')).toBeCloseTo(273.15, 3)
+    })
+
+    it('converts 273.15 K to 0 °C', () => {
+      expect(convert(273.15, 'kelvin', 'celsius')).toBeCloseTo(0, 3)
+    })
+
+    it('converts 0 K to -273.15 °C (absolute zero)', () => {
+      expect(convert(0, 'kelvin', 'celsius')).toBeCloseTo(-273.15, 3)
+    })
+
+    it('converts -40 °C to -40 °F (crossing point)', () => {
+      expect(convert(-40, 'celsius', 'fahrenheit')).toBeCloseTo(-40, 5)
+    })
+
+    it('converts 300 K to ~80.33 °F', () => {
+      expect(convert(300, 'kelvin', 'fahrenheit')).toBeCloseTo(80.33, 1)
+    })
+
+    it('returns identity when source and target are the same', () => {
+      expect(convert(37, 'celsius', 'celsius')).toBe(37)
+      expect(convert(98.6, 'fahrenheit', 'fahrenheit')).toBeCloseTo(98.6, 5)
+    })
+  })
+
+  describe('listCategories', () => {
+    it('contains temperature', () => {
+      expect(listCategories()).toContain('temperature')
+    })
+  })
+
+  describe('listUnits', () => {
+    it('returns all 3 temperature units', () => {
+      const units = listUnits('temperature')
+      expect(units).toHaveLength(3)
+      const ids = units.map((u) => u.id)
+      expect(ids).toEqual(expect.arrayContaining(['celsius', 'fahrenheit', 'kelvin']))
+    })
+  })
+
+  describe('getUnit', () => {
+    it('returns temperature units by id with symbols', () => {
+      expect(getUnit('celsius')).toMatchObject({ id: 'celsius', symbol: '°C' })
+      expect(getUnit('fahrenheit')).toMatchObject({ id: 'fahrenheit', symbol: '°F' })
+      expect(getUnit('kelvin')).toMatchObject({ id: 'kelvin', symbol: 'K' })
+    })
+  })
+})

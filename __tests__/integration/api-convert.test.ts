@@ -74,6 +74,31 @@ describe('POST /api/convert', () => {
     expect(res.body.value).toBeCloseTo(2204.622622, 5)
   })
 
+  it('converts 100 °C to 212 °F', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 100, from: 'celsius', to: 'fahrenheit' })
+    expect(res.status).toBe(200)
+    expect(res.body).toEqual({
+      value: expect.any(Number),
+      from: 'celsius',
+      to: 'fahrenheit',
+      unit: '°F',
+    })
+    expect(res.body.value).toBeCloseTo(212, 5)
+  })
+
+  it('converts 0 K to -273.15 °C', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 0, from: 'kelvin', to: 'celsius' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('°C')
+    expect(res.body.value).toBeCloseTo(-273.15, 3)
+  })
+
   it('returns 400 for a missing field', async () => {
     const app = createApp()
     const res = await request(app).post('/api/convert').send({ value: 5, from: 'meter' })
