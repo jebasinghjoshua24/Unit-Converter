@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Unit {
+  id              String             @id @default(cuid())
+  name            String
+  symbol          String
+  category        UnitCategory
+  description     String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  fromConversions ConversionFactor[] @relation("fromUnit")
+  toConversions   ConversionFactor[] @relation("toUnit")
+}
+
+model ConversionFactor {
+  id         String   @id @default(cuid())
+  fromUnitId String
+  toUnitId   String
+  factor     Float    // multiplier for conversion: value * factor + offset = target
+  offset     Float    @default(0) // for temperature etc.: value * factor + offset
+  isApproximate Boolean @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  fromUnit   Unit     @relation("fromUnit", fields: [fromUnitId], references: [id])
+  toUnit     Unit     @relation("toUnit", fields: [toUnitId], references: [id])
+
+  @@unique([fromUnitId, toUnitId])
+  @@unique([toUnitId, fromUnitId])
+}
+
+enum UnitCategory {
+  LENGTH
+  MASS
+  TEMPERATURE
+  VOLUME
+  TIME
+  SPEED
+  AREA
+  ENERGY
+  PRESSURE
+  CURRENCY
+}
