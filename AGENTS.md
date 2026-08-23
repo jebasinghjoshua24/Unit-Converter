@@ -26,7 +26,9 @@ target unit → get the converted value**.
 | Length      | Implemented (first feature) |
 | Mass        | Implemented   |
 | Temperature | Implemented   |
-| Volume      | Not started   |
+| Area        | Implemented (with Volume) |
+| Volume      | Implemented (with Area)  |
+| Time        | Not started   |
 | ...         | Not started   |
 
 ## 2. Tech Stack (mandated — no alternatives)

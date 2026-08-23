@@ -4,6 +4,45 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 6 — Area + Volume conversion (combined "Dimensions")
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Recorded analysis in `docs/feature-area-volume.md`.
+- Wrote failing tests first (red, committed as `c9117e8`):
+  - Added 14 area + volume tests to `__tests__/unit/conversion-engine.test.ts`.
+  - Added 2 integration tests (m²→ft², gallon→L).
+  - New `__tests__/components/dimensions-converter.test.tsx` — 4 UI tests.
+  - Updated `__tests__/components/category-converter.test.tsx` — Dimensions option.
+- Implemented the feature (green, committed as `6bd42c9`):
+  - `types/conversion.ts` — added `Category: 'area' | 'volume'`, `AreaUnitId`,
+    `VolumeUnitId`, extended `UnitId`.
+  - `lib/conversion/registry.ts` — added `areaUnits` (9 units) and `volumeUnits`
+    (9 units) with base square meter and liter.
+  - `components/dimensions/DimensionsConverter.tsx` — nested selector (Area/Volume)
+    rendering the appropriate `ConverterForm`.
+  - `components/CategoryConverter.tsx` — added "Dimensions" entry.
+
+### Why the approach was chosen
+
+- Area and Volume are physically distinct (m² ≠ L) so they remain separate registry
+  categories. The UI groups them under one "Dimensions" dropdown entry with a nested
+  Area/Volume selector, keeping the category dropdown compact.
+
+### Real-world example
+
+User selects "Dimensions" → "Area", enters `1` square meter → `10.764 ft²`.
+Switches to "Volume", enters `1` gallon → `3.785 L`.
+
+### Functions
+
+- `DimensionsConverter` — client component with nested `dimension` state (area/volume)
+  rendering the appropriate `ConverterForm`.
+
+---
+
 ## Exchange 5 — Temperature conversion feature (TDD: red → green)
 
 **Date:** 2026-08-23
