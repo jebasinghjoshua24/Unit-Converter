@@ -11,16 +11,19 @@ interface UnitSelectProps {
 
 export default function UnitSelect({ label, value, units, onChange }: UnitSelectProps) {
   return (
-    <label className="flex flex-col gap-1 text-sm font-medium">
-      {label}
+    <label className="flex flex-col gap-1.5">
+      <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-slate-400">
+        <span className="inline-block h-2 w-2 rounded-full bg-cyan-glow/70 shadow-[0_0_6px_#00f3ff66]" />
+        {label}
+      </span>
       <select
-        className="rounded-md border border-zinc-300 px-3 py-2 text-sm"
         aria-label={label}
+        className="instrument-select w-full rounded border border-slate-700 px-3 py-2.5 text-sm font-mono tracking-wider text-slate-200"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
         {units.map((unit) => (
-          <option key={unit.id} value={unit.id}>
+          <option key={unit.id} value={unit.id} className="bg-panel-card text-slate-200">
             {unit.name}
           </option>
         ))}
