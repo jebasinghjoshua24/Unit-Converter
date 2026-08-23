@@ -2,6 +2,7 @@ import type { Category, Unit } from '../../types/conversion'
 
 const LENGTH_BASE_UNIT = 'meter'
 const MASS_BASE_UNIT = 'kilogram'
+const TEMPERATURE_BASE_UNIT = 'celsius'
 
 export const lengthUnits: Unit[] = [
   { id: 'millimeter', name: 'Millimeter', symbol: 'mm', factor: 0.001 },
@@ -24,9 +25,16 @@ export const massUnits: Unit[] = [
   { id: 'stone', name: 'Stone', symbol: 'st', factor: 6.35029318 },
 ]
 
+export const temperatureUnits: Unit[] = [
+  { id: 'celsius', name: 'Celsius', symbol: '°C', factor: 1, offset: 0 },
+  { id: 'fahrenheit', name: 'Fahrenheit', symbol: '°F', factor: 5 / 9, offset: -160 / 9 },
+  { id: 'kelvin', name: 'Kelvin', symbol: 'K', factor: 1, offset: -273.15 },
+]
+
 export const registry: Record<Category, Unit[]> = {
   length: lengthUnits,
   mass: massUnits,
+  temperature: temperatureUnits,
 }
 
 export function getBaseUnit(category: Category): string {
@@ -35,6 +43,9 @@ export function getBaseUnit(category: Category): string {
   }
   if (category === 'mass') {
     return MASS_BASE_UNIT
+  }
+  if (category === 'temperature') {
+    return TEMPERATURE_BASE_UNIT
   }
   throw new Error(`Unknown category: ${category}`)
 }

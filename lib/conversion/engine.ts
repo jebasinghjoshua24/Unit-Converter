@@ -24,7 +24,8 @@ export function getUnit(unitId: UnitId): Unit {
 export function convert(value: number, from: UnitId, to: UnitId): number {
   const fromUnit = lookupUnit(from)
   const toUnit = lookupUnit(to)
-  return (value * fromUnit.factor) / toUnit.factor
+  const baseValue = value * fromUnit.factor + (fromUnit.offset ?? 0)
+  return (baseValue - (toUnit.offset ?? 0)) / toUnit.factor
 }
 
 export function listCategories(): Category[] {

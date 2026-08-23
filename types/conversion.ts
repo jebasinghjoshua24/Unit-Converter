@@ -1,4 +1,4 @@
-export type Category = 'length' | 'mass'
+export type Category = 'length' | 'mass' | 'temperature'
 
 export type LengthUnitId =
   | 'millimeter'
@@ -19,13 +19,16 @@ export type MassUnitId =
   | 'pound'
   | 'stone'
 
-export type UnitId = LengthUnitId | MassUnitId
+export type TemperatureUnitId = 'celsius' | 'fahrenheit' | 'kelvin'
+
+export type UnitId = LengthUnitId | MassUnitId | TemperatureUnitId
 
 export interface Unit {
   id: UnitId
   name: string
   symbol: string
   factor: number
+  offset?: number
 }
 
 export interface ConvertRequest {

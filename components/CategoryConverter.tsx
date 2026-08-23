@@ -3,11 +3,13 @@
 import { useState, type ReactNode } from "react";
 import LengthConverter from "./length/LengthConverter";
 import MassConverter from "./mass/MassConverter";
+import TemperatureConverter from "./temperature/TemperatureConverter";
 import type { Category } from "@/types/conversion";
 
 const CATEGORIES: { id: Category; label: string; component: ReactNode }[] = [
   { id: "length", label: "Length", component: <LengthConverter /> },
   { id: "mass", label: "Mass", component: <MassConverter /> },
+  { id: "temperature", label: "Temperature", component: <TemperatureConverter /> },
 ];
 
 export default function CategoryConverter() {
