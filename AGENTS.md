@@ -25,7 +25,7 @@ target unit → get the converted value**.
 | ----------- | ------------- |
 | Length      | Implemented (first feature) |
 | Mass        | Implemented   |
-| Temperature | Not started   |
+| Temperature | Implemented   |
 | Volume      | Not started   |
 | ...         | Not started   |
 
@@ -56,6 +56,10 @@ conversion factors. The database is **not** involved in a conversion request.
 - **Lookup strategy:** every unit stores a factor relative to a canonical base unit per
   category (e.g. `meter` for length). Conversion is `value_from × factor_from ÷ factor_to`.
   This avoids storing an O(n²) matrix of pairwise factors.
+- **Offsets (linear maps):** categories like temperature are not pure ratios. Each unit
+  may carry an `offset` such that `base = value × factor + offset`, and conversion is
+  `(base_from − offset_to) ÷ factor_to`. Length/mass units use `offset: 0`, which reduces
+  to the simple ratio formula above.
 
 ### 3.2 Database is "ready but lazy"
 
@@ -102,6 +106,8 @@ components/
     LengthConverter.tsx     # (client) length wrapper around ConverterForm
   mass/
     MassConverter.tsx       # (client) mass wrapper around ConverterForm
+  temperature/
+    TemperatureConverter.tsx # (client) temperature wrapper around ConverterForm
 lib/
   conversion/
     registry.ts             # Static unit definitions + factors (the source of truth)

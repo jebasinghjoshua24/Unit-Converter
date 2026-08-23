@@ -4,6 +4,52 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 5 — Temperature conversion feature (TDD: red → green)
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Recorded analysis in `docs/feature-temperature.md`.
+- Wrote failing tests first (red, committed as `271ecd8`):
+  - Added 12 temperature tests to `__tests__/unit/conversion-engine.test.ts`
+    (offset conversions, identity, listCategories/listUnits/getUnit).
+  - Added 2 temperature integration tests (`__tests__/integration/api-convert.test.ts`).
+  - New `__tests__/components/temperature-converter.test.tsx` — 4 UI tests.
+  - Updated `__tests__/components/category-converter.test.tsx` — Temperature option.
+- Implemented the feature (green, committed as `06fa885`):
+  - `types/conversion.ts` — added `Category: 'temperature'`, `TemperatureUnitId`,
+    extended `UnitId`, added optional `offset` to `Unit`.
+  - `lib/conversion/registry.ts` — added `temperatureUnits` (Celsius, Fahrenheit,
+    Kelvin) with factor + offset.
+  - `lib/conversion/engine.ts` — `convert` now computes `base = value × factor + offset`
+    then `(base − offsetTo) ÷ factorTo`; length/mass (offset 0) reduce to the old ratio.
+  - `components/temperature/TemperatureConverter.tsx` — thin wrapper around
+    `ConverterForm` with temperature units.
+  - `components/CategoryConverter.tsx` — added Temperature to the dropdown.
+
+### Why the approach was chosen
+
+- **Offset model (linear map):** temperature cannot be expressed as a pure ratio.
+  Each unit stores `factor` + `offset` relative to Celsius; `offset` is optional and
+  defaults to 0, so existing length/mass conversions are unchanged.
+- Reuses the shared `ConverterForm` and `UnitSelect`; the temperature category is just
+  data (units with offsets) plus a thin wrapper.
+
+### Real-world example
+
+User opens the app, selects "Temperature", enters `100` Celsius → Fahrenheit.
+Engine: base = 100×1 + 0 = 100; result = (100 − (−160/9)) ÷ (5/9) = 212 → **212 °F**.
+
+### Functions
+
+- `convert(value, from, to)` — now offset-aware:
+  `base = value × factorFrom + (offsetFrom ?? 0)`; return
+  `(base − (offsetTo ?? 0)) / factorTo`.
+- `TemperatureConverter` — thin wrapper: `ConverterForm units={listUnits("temperature")}`.
+
+---
+
 ## Exchange 4 — Category selector (dropdown switcher)
 
 **Date:** 2026-08-23
