@@ -5,13 +5,13 @@ import { createServer } from 'node:http'
 vi.mock('@/lib/conversion/currency', () => {
   const rates = new Map<string, number>([
     ['usd', 1],
-    ['eur', 0.92],
-    ['gbp', 0.79],
-    ['jpy', 149],
-    ['inr', 83.3],
-    ['cad', 1.36],
-    ['aud', 1.52],
-    ['chf', 0.88],
+    ['eur', 0.85477],
+    ['gbp', 0.73228],
+    ['jpy', 158.7],
+    ['inr', 95.7],
+    ['cad', 1.374],
+    ['aud', 1.3951],
+    ['chf', 0.79947],
   ])
   return {
     convertCurrency: (value: number, fromRate: number, toRate: number) =>
@@ -61,7 +61,7 @@ function createApp() {
 }
 
 describe('POST /api/convert — currency (DB-backed rates)', () => {
-  it('converts 100 USD to ~92 EUR', async () => {
+  it('converts 100 USD to ~85.48 EUR', async () => {
     const app = createApp()
     const res = await request(app)
       .post('/api/convert')
@@ -73,26 +73,26 @@ describe('POST /api/convert — currency (DB-backed rates)', () => {
       to: 'eur',
       unit: 'EUR',
     })
-    expect(res.body.value).toBeCloseTo(92, 4)
+    expect(res.body.value).toBeCloseTo(85.477, 3)
   })
 
-  it('converts 1000 JPY to ~6.71 USD', async () => {
+  it('converts 1000 JPY to ~6.30 USD', async () => {
     const app = createApp()
     const res = await request(app)
       .post('/api/convert')
       .send({ value: 1000, from: 'jpy', to: 'usd' })
     expect(res.status).toBe(200)
     expect(res.body.unit).toBe('USD')
-    expect(res.body.value).toBeCloseTo(6.7114, 3)
+    expect(res.body.value).toBeCloseTo(6.3012, 3)
   })
 
-  it('converts 50 GBP to ~58.23 EUR', async () => {
+  it('converts 50 GBP to ~58.36 EUR', async () => {
     const app = createApp()
     const res = await request(app)
       .post('/api/convert')
       .send({ value: 50, from: 'gbp', to: 'eur' })
     expect(res.status).toBe(200)
     expect(res.body.unit).toBe('EUR')
-    expect(res.body.value).toBeCloseTo(58.23, 2)
+    expect(res.body.value).toBeCloseTo(58.36, 2)
   })
 })

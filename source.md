@@ -27,7 +27,7 @@ Chronological log of every exchange on this project. Newest entries first.
   - `app/api/convert/route.ts` — branches currency→currency to the DB path.
   - `components/currency/CurrencyConverter.tsx` + CategoryConverter entry.
 - Ran `prisma migrate dev` (created `20260823164345_add_currency_rates`) and
-  `prisma db seed` (seeded 8 rates). Verified end-to-end: POST 100 USD→EUR → 92.
+  `prisma db seed` (seeded 8 rates). Verified end-to-end: POST 100 USD→EUR → 85.48.
 
 ### Why the approach was chosen
 
@@ -37,12 +37,14 @@ Chronological log of every exchange on this project. Newest entries first.
   function, fully unit-testable. The route fetches rates via Prisma and injects them.
 - **Prisma 7 requires a driver adapter:** `@prisma/adapter-pg` + `pg`, configured in
   `prisma.config.ts`; the schema `url` is no longer valid.
+- **Live rates:** seed data was refreshed from the Frankfurter/ECB API (2026-08-21)
+  after the initial seed used outdated approximations.
 
 ### Real-world example
 
 User selects "Currency", enters `100` USD → EUR. The route detects a currency pair,
-loads live rates from `Unit` (`usd=1`, `eur=0.92`), and computes
-`100 × 0.92 ÷ 1 = 92` → **€92.00**.
+loads live rates from `Unit` (`usd=1`, `eur=0.85477`), and computes
+`100 × 0.85477 ÷ 1 = 85.48` → **€85.48**.
 
 ### Functions
 

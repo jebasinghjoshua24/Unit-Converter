@@ -40,22 +40,22 @@ stores a **rate relative to USD** (`rate = units of base per 1 USD`). Conversion
 
 Rate convention: `rate` = units of currency per 1 USD (USD rate = 1).
 
-- `100` USD → EUR (rate 0.92): `100 × 0.92 ÷ 1 = 92` → **€92.00**.
-- `1000` JPY → USD (rate 149): `1000 × 1 ÷ 149 = 6.71` → **$6.71**.
-- `100` EUR → USD: `100 × 1 ÷ 0.92 = 108.70` → **$108.70**.
+- `100` USD → EUR (rate 0.85477): `100 × 0.85477 ÷ 1 = 85.48` → **€85.48**.
+- `1000` JPY → USD (rate 158.7): `1000 × 1 ÷ 158.7 = 6.30` → **$6.30**.
+- `100` EUR → USD: `100 × 1 ÷ 0.85477 = 116.99` → **$116.99**.
 
-## 4. Seed data (approximate reference rates)
+## 4. Seed data (reference rates, 2026-08-21)
 
-Seeded via `prisma/seed.ts` so the app works out of the box; refresh later from an
-exchange-rate API.
+Seeded via `prisma/seed.ts` so the app works out of the box; refresh from an
+exchange-rate API (e.g. Frankfurter/ECB) as needed.
 
 | Code | Name        | Rate per 1 USD |
 | ---- | ----------- | -------------- |
 | USD  | US Dollar   | 1              |
-| EUR  | Euro        | 0.92           |
-| GBP  | British Pound | 0.79         |
-| JPY  | Japanese Yen | 149.0         |
-| INR  | Indian Rupee | 83.3           |
-| CAD  | Canadian Dollar | 1.36        |
-| AUD  | Australian Dollar | 1.52     |
-| CHF  | Swiss Franc | 0.88           |
+| EUR  | Euro        | 0.85477        |
+| GBP  | British Pound | 0.73228      |
+| JPY  | Japanese Yen | 158.7         |
+| INR  | Indian Rupee | 95.7           |
+| CAD  | Canadian Dollar | 1.374        |
+| AUD  | Australian Dollar | 1.3951     |
+| CHF  | Swiss Franc | 0.79947         |
