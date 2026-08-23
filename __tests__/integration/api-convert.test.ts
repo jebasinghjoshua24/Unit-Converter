@@ -119,6 +119,46 @@ describe('POST /api/convert', () => {
     expect(res.body.value).toBeCloseTo(3.7854, 3)
   })
 
+  it('converts 2 hours to 120 minutes', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 2, from: 'hour', to: 'minute' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('min')
+    expect(res.body.value).toBeCloseTo(120, 5)
+  })
+
+  it('converts 100 km/h to ~62.137 mph', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 100, from: 'kmh', to: 'mph' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('mph')
+    expect(res.body.value).toBeCloseTo(62.137, 2)
+  })
+
+  it('converts 1 kWh to 3600 kJ', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 1, from: 'kwh', to: 'kilojoule' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('kJ')
+    expect(res.body.value).toBeCloseTo(3600, 4)
+  })
+
+  it('converts 1 atm to ~14.696 psi', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 1, from: 'atmosphere', to: 'psi' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('psi')
+    expect(res.body.value).toBeCloseTo(14.696, 2)
+  })
+
   it('returns 400 for a missing field', async () => {
     const app = createApp()
     const res = await request(app).post('/api/convert').send({ value: 5, from: 'meter' })

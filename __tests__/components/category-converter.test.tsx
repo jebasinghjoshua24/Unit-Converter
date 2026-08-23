@@ -28,13 +28,17 @@ describe('CategoryConverter', () => {
     cleanup()
   })
 
-  it('renders a category dropdown with Length, Mass, Temperature, and Dimensions options', () => {
+  it('renders a category dropdown with all options', () => {
     render(<CategoryConverter />)
     const select = screen.getByLabelText(/category/i)
     expect(within(select).getByRole('option', { name: 'Length' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Mass' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Temperature' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Dimensions' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Time' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Speed' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Energy' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Pressure' })).toBeInTheDocument()
   })
 
   it('defaults to the Length converter', () => {

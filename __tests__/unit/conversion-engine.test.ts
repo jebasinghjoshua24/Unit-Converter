@@ -291,3 +291,78 @@ describe('conversion engine — combined dimensions categories', () => {
     expect(categories).toContain('volume')
   })
 })
+
+describe('conversion engine — time', () => {
+  it('converts 2 hours to 120 minutes', () => {
+    expect(convert(2, 'hour', 'minute')).toBeCloseTo(120, 5)
+  })
+  it('converts 1 day to 24 hours', () => {
+    expect(convert(1, 'day', 'hour')).toBeCloseTo(24, 5)
+  })
+  it('converts 1 week to 7 days', () => {
+    expect(convert(1, 'week', 'day')).toBeCloseTo(7, 5)
+  })
+  it('returns identity', () => {
+    expect(convert(60, 'second', 'second')).toBe(60)
+  })
+  it('lists all 6 time units', () => {
+    expect(listUnits('time')).toHaveLength(6)
+  })
+  it('contains time category', () => {
+    expect(listCategories()).toContain('time')
+  })
+})
+
+describe('conversion engine — speed', () => {
+  it('converts 100 km/h to ~62.137 mph', () => {
+    expect(convert(100, 'kmh', 'mph')).toBeCloseTo(62.137, 2)
+  })
+  it('converts 1 m/s to ~3.6 km/h', () => {
+    expect(convert(1, 'ms', 'kmh')).toBeCloseTo(3.6, 4)
+  })
+  it('converts 10 knots to ~11.507 mph', () => {
+    expect(convert(10, 'knot', 'mph')).toBeCloseTo(11.507, 2)
+  })
+  it('lists all 5 speed units', () => {
+    expect(listUnits('speed')).toHaveLength(5)
+  })
+  it('contains speed category', () => {
+    expect(listCategories()).toContain('speed')
+  })
+})
+
+describe('conversion engine — energy', () => {
+  it('converts 1 kWh to 3600 kJ', () => {
+    expect(convert(1, 'kwh', 'kilojoule')).toBeCloseTo(3600, 4)
+  })
+  it('converts 1 calorie to ~4.184 joules', () => {
+    expect(convert(1, 'calorie', 'joule')).toBeCloseTo(4.184, 4)
+  })
+  it('converts 1 kWh to ~860.42 kcal', () => {
+    expect(convert(1, 'kwh', 'kilocalorie')).toBeCloseTo(860.42, 1)
+  })
+  it('lists all 6 energy units', () => {
+    expect(listUnits('energy')).toHaveLength(6)
+  })
+  it('contains energy category', () => {
+    expect(listCategories()).toContain('energy')
+  })
+})
+
+describe('conversion engine — pressure', () => {
+  it('converts 1 atm to ~14.696 psi', () => {
+    expect(convert(1, 'atmosphere', 'psi')).toBeCloseTo(14.696, 2)
+  })
+  it('converts 1 bar to 100 kPa', () => {
+    expect(convert(1, 'bar', 'kilopascal')).toBeCloseTo(100, 4)
+  })
+  it('converts 760 mmHg to ~1 atm', () => {
+    expect(convert(760, 'mmhg', 'atmosphere')).toBeCloseTo(1, 3)
+  })
+  it('lists all 6 pressure units', () => {
+    expect(listUnits('pressure')).toHaveLength(6)
+  })
+  it('contains pressure category', () => {
+    expect(listCategories()).toContain('pressure')
+  })
+})
