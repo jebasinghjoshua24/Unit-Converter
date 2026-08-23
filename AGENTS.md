@@ -95,9 +95,13 @@ app/
   api/
     convert/route.ts        # POST /api/convert — HTTP boundary (thin)
 components/
-  length/                   # Length-specific UI
-    LengthConverter.tsx     # (client) form + result for length
-    UnitSelect.tsx          # (client) reusable unit dropdown
+  CategoryConverter.tsx     # (client) dropdown to switch between categories
+  ConverterForm.tsx         # (client) generic converter form (value, units, result)
+  UnitSelect.tsx            # (client) reusable unit dropdown
+  length/
+    LengthConverter.tsx     # (client) length wrapper around ConverterForm
+  mass/
+    MassConverter.tsx       # (client) mass wrapper around ConverterForm
 lib/
   conversion/
     registry.ts             # Static unit definitions + factors (the source of truth)
@@ -111,6 +115,8 @@ __tests__/
     api-convert.test.ts
   components/
     length-converter.test.tsx
+    mass-converter.test.tsx
+    category-converter.test.tsx
 prisma/
   schema.prisma             # Unit + ConversionFactor models (ready, unused for static)
   migrations/               # Generated migration scripts

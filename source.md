@@ -4,6 +4,42 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 4 — Category selector (dropdown switcher)
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Recorded analysis in `docs/feature-category-selector.md`.
+- Wrote failing tests first (red, committed as `9ed971d`):
+  - New `__tests__/components/category-converter.test.tsx` — 5 UI tests: renders
+    dropdown with Length/Mass, defaults to Length, switches to Mass, switches back,
+    converts after switching.
+- Implemented the feature (green, committed as `eeb499f`):
+  - `components/CategoryConverter.tsx` — new client component: category `<select>`
+    (default `length`) + renders the matching converter one at a time.
+  - `app/page.tsx` — now renders `<CategoryConverter />` instead of stacking
+    `LengthConverter` and `MassConverter` vertically.
+
+### Why the approach was chosen
+
+- A vertical stack grows unbounded as categories are added. A single dropdown keeps
+  the page compact and scales by adding one entry + one branch per category.
+- Kept `LengthConverter` / `MassConverter` wrappers unchanged (still tested) so the
+  switcher is purely a presentational concern (single responsibility).
+
+### Real-world example
+
+User opens the app → sees the Length converter by default. Opens the "Category"
+dropdown, selects "Mass" → the Mass converter appears. Selects "Length" → Length returns.
+
+### Functions
+
+- `CategoryConverter` — client component. Inputs: none (state-internal). Output:
+  category `<select>` + the selected converter. Internal state: `category`.
+
+---
+
 ## Exchange 3 — Mass conversion feature (TDD: red → green)
 
 **Date:** 2026-08-23
