@@ -4,6 +4,42 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 7 — Time, Speed, Energy, Pressure (pure-ratio categories)
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Recorded analysis in `docs/feature-ratio-units.md` (4 categories, all pure ratio).
+- Wrote failing tests first (red, committed as `95e6c0b`):
+  - Added 21 engine tests, 4 integration tests, 12 component tests
+    (`time/speed/energy/pressure-converter.test.tsx`), and updated the
+    CategoryConverter test.
+- Implemented the feature (green, committed as `4172b86`):
+  - `types/conversion.ts` — added `time`, `speed`, `energy`, `pressure` categories
+    and their unit-id unions.
+  - `lib/conversion/registry.ts` — added `timeUnits` (6), `speedUnits` (5),
+    `energyUnits` (6), `pressureUnits` (6).
+  - New wrappers: `components/{time,speed,energy,pressure}/*Converter.tsx`.
+  - `components/CategoryConverter.tsx` — added the 4 entries.
+
+### Why the approach was chosen
+
+- All four are pure ratios, so they reuse the existing `ConverterForm`/`UnitSelect`
+  with zero engine changes. This branch bundles them to reduce branch/commit overhead;
+  each category is still an atomic commit.
+
+### Real-world example
+
+User selects "Speed", enters `100` km/h → `62.137 mph`. Selects "Pressure",
+enters `1` atm → `14.696 psi`.
+
+### Functions
+
+- Four thin wrappers around `ConverterForm` (one per category).
+
+---
+
 ## Exchange 6 — Area + Volume conversion (combined "Dimensions")
 
 **Date:** 2026-08-23

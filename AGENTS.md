@@ -28,8 +28,11 @@ target unit → get the converted value**.
 | Temperature | Implemented   |
 | Area        | Implemented (with Volume) |
 | Volume      | Implemented (with Area)  |
-| Time        | Not started   |
-| ...         | Not started   |
+| Time        | Implemented   |
+| Speed       | Implemented   |
+| Energy      | Implemented   |
+| Pressure    | Implemented   |
+| Currency    | Not started   |
 
 ## 2. Tech Stack (mandated — no alternatives)
 
