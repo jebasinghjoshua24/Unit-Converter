@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { convert, listUnits } from '@/lib/conversion/engine'
-import type { ConvertRequest, ConvertResult, Unit } from '@/types/conversion'
+import { convert, getUnit } from '@/lib/conversion/engine'
+import type { ConvertRequest, ConvertResult } from '@/types/conversion'
 
 interface ConvertRequestBody {
   value?: unknown
@@ -40,10 +40,10 @@ export async function POST(request: Request) {
   }
 
   let result: number
-  let targetUnit: Unit
+  let targetSymbol: string
   try {
     result = convert(body.value, body.from, body.to)
-    targetUnit = listUnits('length').find((u) => u.id === body.to)!
+    targetSymbol = getUnit(body.to).symbol
   } catch {
     return errorResponse('Unknown unit', 400)
   }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     value: result,
     from: body.from,
     to: body.to,
-    unit: targetUnit.symbol,
+    unit: targetSymbol,
   }
   return NextResponse.json(payload)
 }

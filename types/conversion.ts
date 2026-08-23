@@ -1,4 +1,4 @@
-export type Category = 'length'
+export type Category = 'length' | 'mass'
 
 export type LengthUnitId =
   | 'millimeter'
@@ -10,7 +10,16 @@ export type LengthUnitId =
   | 'yard'
   | 'mile'
 
-export type UnitId = LengthUnitId
+export type MassUnitId =
+  | 'milligram'
+  | 'gram'
+  | 'kilogram'
+  | 'tonne'
+  | 'ounce'
+  | 'pound'
+  | 'stone'
+
+export type UnitId = LengthUnitId | MassUnitId
 
 export interface Unit {
   id: UnitId

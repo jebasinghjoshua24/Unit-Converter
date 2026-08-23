@@ -17,6 +17,10 @@ function lookupUnit(unitId: string): Unit {
   return unit
 }
 
+export function getUnit(unitId: UnitId): Unit {
+  return lookupUnit(unitId)
+}
+
 export function convert(value: number, from: UnitId, to: UnitId): number {
   const fromUnit = lookupUnit(from)
   const toUnit = lookupUnit(to)
