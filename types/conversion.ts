@@ -1,4 +1,4 @@
-export type Category = 'length' | 'mass' | 'temperature'
+export type Category = 'length' | 'mass' | 'temperature' | 'area' | 'volume'
 
 export type LengthUnitId =
   | 'millimeter'
@@ -21,7 +21,29 @@ export type MassUnitId =
 
 export type TemperatureUnitId = 'celsius' | 'fahrenheit' | 'kelvin'
 
-export type UnitId = LengthUnitId | MassUnitId | TemperatureUnitId
+export type AreaUnitId =
+  | 'square-millimeter'
+  | 'square-centimeter'
+  | 'square-meter'
+  | 'square-kilometer'
+  | 'square-inch'
+  | 'square-foot'
+  | 'square-yard'
+  | 'acre'
+  | 'square-mile'
+
+export type VolumeUnitId =
+  | 'milliliter'
+  | 'liter'
+  | 'cubic-meter'
+  | 'cubic-foot'
+  | 'cubic-inch'
+  | 'gallon'
+  | 'quart'
+  | 'pint'
+  | 'fluid-ounce'
+
+export type UnitId = LengthUnitId | MassUnitId | TemperatureUnitId | AreaUnitId | VolumeUnitId
 
 export interface Unit {
   id: UnitId

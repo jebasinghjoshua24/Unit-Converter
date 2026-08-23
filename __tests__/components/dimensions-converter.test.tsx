@@ -46,7 +46,7 @@ describe('DimensionsConverter', () => {
     fireEvent.change(screen.getByLabelText(/dimension/i), { target: { value: 'volume' } })
     const fromSelect = screen.getByLabelText(/from unit/i)
     expect(fromSelect.querySelectorAll('option')).toHaveLength(9)
-    expect(within(fromSelect).getByRole('option', { name: 'Gallon' })).toBeInTheDocument()
+    expect(within(fromSelect).getByRole('option', { name: /gallon/i })).toBeInTheDocument()
   })
 
   it('converts 1 square meter to square feet and shows the result', async () => {

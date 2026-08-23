@@ -3,6 +3,8 @@ import type { Category, Unit } from '../../types/conversion'
 const LENGTH_BASE_UNIT = 'meter'
 const MASS_BASE_UNIT = 'kilogram'
 const TEMPERATURE_BASE_UNIT = 'celsius'
+const AREA_BASE_UNIT = 'square-meter'
+const VOLUME_BASE_UNIT = 'liter'
 
 export const lengthUnits: Unit[] = [
   { id: 'millimeter', name: 'Millimeter', symbol: 'mm', factor: 0.001 },
@@ -31,10 +33,36 @@ export const temperatureUnits: Unit[] = [
   { id: 'kelvin', name: 'Kelvin', symbol: 'K', factor: 1, offset: -273.15 },
 ]
 
+export const areaUnits: Unit[] = [
+  { id: 'square-millimeter', name: 'Square Millimeter', symbol: 'mm²', factor: 0.000001 },
+  { id: 'square-centimeter', name: 'Square Centimeter', symbol: 'cm²', factor: 0.0001 },
+  { id: 'square-meter', name: 'Square Meter', symbol: 'm²', factor: 1 },
+  { id: 'square-kilometer', name: 'Square Kilometer', symbol: 'km²', factor: 1000000 },
+  { id: 'square-inch', name: 'Square Inch', symbol: 'in²', factor: 0.00064516 },
+  { id: 'square-foot', name: 'Square Foot', symbol: 'ft²', factor: 0.09290304 },
+  { id: 'square-yard', name: 'Square Yard', symbol: 'yd²', factor: 0.83612736 },
+  { id: 'acre', name: 'Acre', symbol: 'ac', factor: 4046.8564224 },
+  { id: 'square-mile', name: 'Square Mile', symbol: 'mi²', factor: 2589988.110336 },
+]
+
+export const volumeUnits: Unit[] = [
+  { id: 'milliliter', name: 'Milliliter', symbol: 'mL', factor: 0.001 },
+  { id: 'liter', name: 'Liter', symbol: 'L', factor: 1 },
+  { id: 'cubic-meter', name: 'Cubic Meter', symbol: 'm³', factor: 1000 },
+  { id: 'cubic-foot', name: 'Cubic Foot', symbol: 'ft³', factor: 28.316846592 },
+  { id: 'cubic-inch', name: 'Cubic Inch', symbol: 'in³', factor: 0.016387064 },
+  { id: 'gallon', name: 'Gallon (US)', symbol: 'gal', factor: 3.785411784 },
+  { id: 'quart', name: 'Quart (US)', symbol: 'qt', factor: 0.946352946 },
+  { id: 'pint', name: 'Pint (US)', symbol: 'pt', factor: 0.473176473 },
+  { id: 'fluid-ounce', name: 'Fluid Ounce', symbol: 'fl oz', factor: 0.0295735295625 },
+]
+
 export const registry: Record<Category, Unit[]> = {
   length: lengthUnits,
   mass: massUnits,
   temperature: temperatureUnits,
+  area: areaUnits,
+  volume: volumeUnits,
 }
 
 export function getBaseUnit(category: Category): string {
@@ -46,6 +74,12 @@ export function getBaseUnit(category: Category): string {
   }
   if (category === 'temperature') {
     return TEMPERATURE_BASE_UNIT
+  }
+  if (category === 'area') {
+    return AREA_BASE_UNIT
+  }
+  if (category === 'volume') {
+    return VOLUME_BASE_UNIT
   }
   throw new Error(`Unknown category: ${category}`)
 }
