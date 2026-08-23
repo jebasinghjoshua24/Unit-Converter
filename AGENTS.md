@@ -32,7 +32,7 @@ target unit → get the converted value**.
 | Speed       | Implemented   |
 | Energy      | Implemented   |
 | Pressure    | Implemented   |
-| Currency    | Not started   |
+| Currency    | Implemented   |
 
 ## 2. Tech Stack (mandated — no alternatives)
 
@@ -65,17 +65,27 @@ conversion factors. The database is **not** involved in a conversion request.
   may carry an `offset` such that `base = value × factor + offset`, and conversion is
   `(base_from − offset_to) ÷ factor_to`. Length/mass units use `offset: 0`, which reduces
   to the simple ratio formula above.
+- **Exception — Currency:** rates change daily, so currency uses the **database**
+  (`lib/conversion/currency.ts`). The API route detects a currency→currency pair and
+  fetches live rates from Prisma, computing via the pure `convertCurrency` function.
+  The registry keeps currency metadata (code/name/symbol) so the dropdown renders
+  without a DB hit; `convert()` refuses currency units.
 
 ### 3.2 Database is "ready but lazy"
 
 Prisma + PostgreSQL schema exists (`prisma/schema.prisma`) with `Unit` and
 `ConversionFactor` tables so that **dynamic or user-contributed** units can be added
-later without a redesign.
+later without a redesign. **Currency is now the first DB-backed category**: currency
+units are seeded into `Unit` (with a `rate` column relative to the base currency) and
+the API route reads rates per request.
 
-- **When to use the DB:** only if/when a conversion category has dynamic factors
-  (e.g. currency exchange rates, user-defined units).
+- **Static categories** (length → pressure): computed in pure code, DB untouched.
+- **Currency:** live rates fetched via Prisma.
 - **Migration scripts** live in `prisma/migrations/` and are created with
-  `npx prisma migrate dev`.
+  `npx prisma migrate dev`. Connection config lives in `prisma.config.ts` (Prisma 7
+  requires a driver adapter: `@prisma/adapter-pg` + `pg`).
+- **Seed data:** `npx prisma db seed` populates currency rates from `prisma/seed.ts`.
+  Rates are approximate references — refresh them from an exchange-rate API as needed.
 
 ### 3.3 Single Responsibility
 
@@ -113,24 +123,48 @@ components/
     MassConverter.tsx       # (client) mass wrapper around ConverterForm
   temperature/
     TemperatureConverter.tsx # (client) temperature wrapper around ConverterForm
+  dimensions/
+    DimensionsConverter.tsx # (client) area/volume nested selector
+  currency/
+    CurrencyConverter.tsx   # (client) currency wrapper around ConverterForm
+  time/
+    TimeConverter.tsx       # (client) time wrapper around ConverterForm
+  speed/
+    SpeedConverter.tsx      # (client) speed wrapper around ConverterForm
+  energy/
+    EnergyConverter.tsx     # (client) energy wrapper around ConverterForm
+  pressure/
+    PressureConverter.tsx   # (client) pressure wrapper around ConverterForm
 lib/
   conversion/
     registry.ts             # Static unit definitions + factors (the source of truth)
     engine.ts               # Pure conversion functions (convert, listCategories, ...)
+    currency.ts             # DB-backed currency rates + convertCurrency (pure)
 types/
   conversion.ts             # Shared TS types (Unit, Category, ConvertRequest, ...)
 __tests__/
   unit/
     conversion-engine.test.ts
+    currency.test.ts
   integration/
     api-convert.test.ts
+    api-convert-currency.test.ts
   components/
     length-converter.test.tsx
     mass-converter.test.tsx
     category-converter.test.tsx
+    dimensions-converter.test.tsx
+    temperature-converter.test.tsx
+    time-converter.test.tsx
+    speed-converter.test.tsx
+    energy-converter.test.tsx
+    pressure-converter.test.tsx
+    currency-converter.test.tsx
 prisma/
-  schema.prisma             # Unit + ConversionFactor models (ready, unused for static)
+  schema.prisma             # Unit + ConversionFactor models (+ rate for currency)
+  seed.ts                   # Seeds currency rates
   migrations/               # Generated migration scripts
+prisma.config.ts            # Prisma 7 connection config (adapter + seed)
 docs/                       # Design notes, ADRs (architecture decision records)
 source.md                   # Change log (see §7)
 AGENTS.md                   # This file

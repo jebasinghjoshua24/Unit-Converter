@@ -4,6 +4,55 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 8 — Currency conversion (first DB-backed category)
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Recorded analysis in `docs/feature-currency.md`.
+- Wrote failing tests first (red, committed as `4664c4e`):
+  - `__tests__/unit/currency.test.ts` — 6 tests for the pure `convertCurrency`.
+  - 4 currency engine tests (listCategories/listUnits/getUnit, static-convert guard).
+  - `__tests__/integration/api-convert-currency.test.ts` — 3 tests with mocked rates.
+  - `__tests__/components/currency-converter.test.tsx` — 3 UI tests.
+  - Updated CategoryConverter test with Currency option.
+- Implemented (green, committed as `04c181f`):
+  - `prisma/schema.prisma` — added `rate Float?` to `Unit`, made `symbol` unique.
+  - `prisma.config.ts` — Prisma 7 config (adapter + seed); removed `url` from schema.
+  - `prisma/seed.ts` — seeds 8 currency rates relative to USD.
+  - `lib/conversion/currency.ts` — pure `convertCurrency` + DB-backed
+    `getCurrencyRates` / `convertCurrencyWithDb` using `@prisma/adapter-pg`.
+  - `lib/conversion/engine.ts` — `isCurrencyUnit`; `convert()` refuses currency units.
+  - `app/api/convert/route.ts` — branches currency→currency to the DB path.
+  - `components/currency/CurrencyConverter.tsx` + CategoryConverter entry.
+- Ran `prisma migrate dev` (created `20260823164345_add_currency_rates`) and
+  `prisma db seed` (seeded 8 rates). Verified end-to-end: POST 100 USD→EUR → 92.
+
+### Why the approach was chosen
+
+- **Currency is dynamic:** exchange rates change daily, so they belong in PostgreSQL.
+  The registry keeps only metadata so the dropdown needs no DB query.
+- **Pure core + injected rates:** `convertCurrency(value, fromRate, toRate)` is a pure
+  function, fully unit-testable. The route fetches rates via Prisma and injects them.
+- **Prisma 7 requires a driver adapter:** `@prisma/adapter-pg` + `pg`, configured in
+  `prisma.config.ts`; the schema `url` is no longer valid.
+
+### Real-world example
+
+User selects "Currency", enters `100` USD → EUR. The route detects a currency pair,
+loads live rates from `Unit` (`usd=1`, `eur=0.92`), and computes
+`100 × 0.92 ÷ 1 = 92` → **€92.00**.
+
+### Functions
+
+- `convertCurrency(value, fromRate, toRate)` — pure: `value × toRate ÷ fromRate`.
+- `getCurrencyRates()` — async, Prisma query returning `Map<code, rate>`.
+- `convertCurrencyWithDb(value, from, to)` — async, fetches rates then converts.
+- `isCurrencyUnit(unitId)` — engine helper used by the route to branch.
+
+---
+
 ## Exchange 7 — Time, Speed, Energy, Pressure (pure-ratio categories)
 
 **Date:** 2026-08-23
