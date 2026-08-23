@@ -79,7 +79,7 @@ describe('conversion engine — length category', () => {
     })
 
     it('throws for an unknown category', () => {
-      expect(() => listUnits('energy' as Category)).toThrow()
+      expect(() => listUnits('currency' as Category)).toThrow()
     })
   })
 })

@@ -5,6 +5,10 @@ const MASS_BASE_UNIT = 'kilogram'
 const TEMPERATURE_BASE_UNIT = 'celsius'
 const AREA_BASE_UNIT = 'square-meter'
 const VOLUME_BASE_UNIT = 'liter'
+const TIME_BASE_UNIT = 'second'
+const SPEED_BASE_UNIT = 'ms'
+const ENERGY_BASE_UNIT = 'joule'
+const PRESSURE_BASE_UNIT = 'pascal'
 
 export const lengthUnits: Unit[] = [
   { id: 'millimeter', name: 'Millimeter', symbol: 'mm', factor: 0.001 },
@@ -57,12 +61,51 @@ export const volumeUnits: Unit[] = [
   { id: 'fluid-ounce', name: 'Fluid Ounce', symbol: 'fl oz', factor: 0.0295735295625 },
 ]
 
+export const timeUnits: Unit[] = [
+  { id: 'millisecond', name: 'Millisecond', symbol: 'ms', factor: 0.001 },
+  { id: 'second', name: 'Second', symbol: 's', factor: 1 },
+  { id: 'minute', name: 'Minute', symbol: 'min', factor: 60 },
+  { id: 'hour', name: 'Hour', symbol: 'h', factor: 3600 },
+  { id: 'day', name: 'Day', symbol: 'd', factor: 86400 },
+  { id: 'week', name: 'Week', symbol: 'wk', factor: 604800 },
+]
+
+export const speedUnits: Unit[] = [
+  { id: 'ms', name: 'Meter per Second', symbol: 'm/s', factor: 1 },
+  { id: 'kmh', name: 'Kilometer per Hour', symbol: 'km/h', factor: 0.277778 },
+  { id: 'mph', name: 'Mile per Hour', symbol: 'mph', factor: 0.44704 },
+  { id: 'fts', name: 'Foot per Second', symbol: 'ft/s', factor: 0.3048 },
+  { id: 'knot', name: 'Knot', symbol: 'kn', factor: 0.514444 },
+]
+
+export const energyUnits: Unit[] = [
+  { id: 'joule', name: 'Joule', symbol: 'J', factor: 1 },
+  { id: 'kilojoule', name: 'Kilojoule', symbol: 'kJ', factor: 1000 },
+  { id: 'calorie', name: 'Calorie', symbol: 'cal', factor: 4.184 },
+  { id: 'kilocalorie', name: 'Kilocalorie', symbol: 'kcal', factor: 4184 },
+  { id: 'wh', name: 'Watt-hour', symbol: 'Wh', factor: 3600 },
+  { id: 'kwh', name: 'Kilowatt-hour', symbol: 'kWh', factor: 3600000 },
+]
+
+export const pressureUnits: Unit[] = [
+  { id: 'pascal', name: 'Pascal', symbol: 'Pa', factor: 1 },
+  { id: 'kilopascal', name: 'Kilopascal', symbol: 'kPa', factor: 1000 },
+  { id: 'bar', name: 'Bar', symbol: 'bar', factor: 100000 },
+  { id: 'atmosphere', name: 'Atmosphere', symbol: 'atm', factor: 101325 },
+  { id: 'mmhg', name: 'Millimeter of Mercury', symbol: 'mmHg', factor: 133.322 },
+  { id: 'psi', name: 'Pound per Square Inch', symbol: 'psi', factor: 6894.757 },
+]
+
 export const registry: Record<Category, Unit[]> = {
   length: lengthUnits,
   mass: massUnits,
   temperature: temperatureUnits,
   area: areaUnits,
   volume: volumeUnits,
+  time: timeUnits,
+  speed: speedUnits,
+  energy: energyUnits,
+  pressure: pressureUnits,
 }
 
 export function getBaseUnit(category: Category): string {
@@ -80,6 +123,18 @@ export function getBaseUnit(category: Category): string {
   }
   if (category === 'volume') {
     return VOLUME_BASE_UNIT
+  }
+  if (category === 'time') {
+    return TIME_BASE_UNIT
+  }
+  if (category === 'speed') {
+    return SPEED_BASE_UNIT
+  }
+  if (category === 'energy') {
+    return ENERGY_BASE_UNIT
+  }
+  if (category === 'pressure') {
+    return PRESSURE_BASE_UNIT
   }
   throw new Error(`Unknown category: ${category}`)
 }

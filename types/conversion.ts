@@ -1,4 +1,13 @@
-export type Category = 'length' | 'mass' | 'temperature' | 'area' | 'volume'
+export type Category =
+  | 'length'
+  | 'mass'
+  | 'temperature'
+  | 'area'
+  | 'volume'
+  | 'time'
+  | 'speed'
+  | 'energy'
+  | 'pressure'
 
 export type LengthUnitId =
   | 'millimeter'
@@ -43,7 +52,36 @@ export type VolumeUnitId =
   | 'pint'
   | 'fluid-ounce'
 
-export type UnitId = LengthUnitId | MassUnitId | TemperatureUnitId | AreaUnitId | VolumeUnitId
+export type TimeUnitId =
+  | 'millisecond'
+  | 'second'
+  | 'minute'
+  | 'hour'
+  | 'day'
+  | 'week'
+
+export type SpeedUnitId = 'ms' | 'kmh' | 'mph' | 'fts' | 'knot'
+
+export type EnergyUnitId =
+  | 'joule'
+  | 'kilojoule'
+  | 'calorie'
+  | 'kilocalorie'
+  | 'wh'
+  | 'kwh'
+
+export type PressureUnitId = 'pascal' | 'kilopascal' | 'bar' | 'atmosphere' | 'mmhg' | 'psi'
+
+export type UnitId =
+  | LengthUnitId
+  | MassUnitId
+  | TemperatureUnitId
+  | AreaUnitId
+  | VolumeUnitId
+  | TimeUnitId
+  | SpeedUnitId
+  | EnergyUnitId
+  | PressureUnitId
 
 export interface Unit {
   id: UnitId

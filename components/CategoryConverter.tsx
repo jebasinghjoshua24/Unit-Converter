@@ -5,6 +5,10 @@ import LengthConverter from "./length/LengthConverter";
 import MassConverter from "./mass/MassConverter";
 import TemperatureConverter from "./temperature/TemperatureConverter";
 import DimensionsConverter from "./dimensions/DimensionsConverter";
+import TimeConverter from "./time/TimeConverter";
+import SpeedConverter from "./speed/SpeedConverter";
+import EnergyConverter from "./energy/EnergyConverter";
+import PressureConverter from "./pressure/PressureConverter";
 import type { Category } from "@/types/conversion";
 
 const CATEGORIES: { id: Category | 'dimensions'; label: string; component: ReactNode }[] = [
@@ -12,6 +16,10 @@ const CATEGORIES: { id: Category | 'dimensions'; label: string; component: React
   { id: "mass", label: "Mass", component: <MassConverter /> },
   { id: "temperature", label: "Temperature", component: <TemperatureConverter /> },
   { id: "dimensions", label: "Dimensions", component: <DimensionsConverter /> },
+  { id: "time", label: "Time", component: <TimeConverter /> },
+  { id: "speed", label: "Speed", component: <SpeedConverter /> },
+  { id: "energy", label: "Energy", component: <EnergyConverter /> },
+  { id: "pressure", label: "Pressure", component: <PressureConverter /> },
 ];
 
 export default function CategoryConverter() {
