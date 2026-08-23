@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+
+# agent skills (installed locally, not project code)
+/.agents/
 /.pnp
 .pnp.*
 .yarn/*
