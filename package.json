@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "husky"
   },
   "dependencies": {
     "@prisma/client": "^7.9.1",
@@ -29,6 +30,7 @@
     "@vitejs/plugin-react": "^6.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
+    "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "prisma": "^7.9.1",
     "supertest": "^7.2.2",

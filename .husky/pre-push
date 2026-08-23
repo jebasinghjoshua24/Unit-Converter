@@ -1,0 +1,2 @@
+echo "Running tests and lint before push..."
+npm run test:run && npm run lint
