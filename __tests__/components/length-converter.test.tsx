@@ -1,13 +1,15 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, cleanup, within } from '@testing-library/react'
 import LengthConverter from '../../components/length/LengthConverter'
 
 function mockFetchOk(body: unknown) {
   return vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(body),
-    }),
+    Promise.resolve(
+      new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    ),
   )
 }
 
@@ -23,6 +25,7 @@ describe('LengthConverter', () => {
 
   afterEach(() => {
     vi.restoreAllMocks()
+    cleanup()
   })
 
   it('renders the value input, unit selects, and convert button', () => {
@@ -39,8 +42,8 @@ describe('LengthConverter', () => {
     const toSelect = screen.getByLabelText(/to unit/i)
     expect(fromSelect.querySelectorAll('option')).toHaveLength(8)
     expect(toSelect.querySelectorAll('option')).toHaveLength(8)
-    expect(screen.getByRole('option', { name: /meter/i })).toBeInTheDocument()
-    expect(screen.getByRole('option', { name: /foot/i })).toBeInTheDocument()
+    expect(within(fromSelect).getByRole('option', { name: 'Meter' })).toBeInTheDocument()
+    expect(within(toSelect).getByRole('option', { name: 'Foot' })).toBeInTheDocument()
   })
 
   it('converts 5 meters to feet and shows the result', async () => {
@@ -61,10 +64,12 @@ describe('LengthConverter', () => {
 
   it('shows an error message when the API request fails', async () => {
     global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-        json: () => Promise.resolve({ error: 'Unknown unit' }),
-      }),
+      Promise.resolve(
+        new Response(JSON.stringify({ error: 'Unknown unit' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
     )
     render(<LengthConverter />)
     fireEvent.change(screen.getByLabelText(/value/i), { target: { value: '5' } })

@@ -5,6 +5,12 @@ import { POST } from '../../app/api/convert/route'
 
 function createApp() {
   return createServer((req, res) => {
+    if (req.method !== 'POST') {
+      res.statusCode = 405
+      res.setHeader('Content-Type', 'application/json')
+      res.end(JSON.stringify({ error: 'Method not allowed' }))
+      return
+    }
     let body = ''
     req.on('data', (chunk) => {
       body += chunk
