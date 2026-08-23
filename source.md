@@ -27,6 +27,20 @@ Chronological log of every exchange on this project. Newest entries first.
     hazard "ENGAGE CONVERT" switch, amber analog-gauge result readout.
   - `components/dimensions/DimensionsConverter.tsx` — nested selector in a beveled panel.
 
+### Interactive enhancements
+
+- `components/RotaryDial.tsx` — drag-to-rotate, scroll-wheel, and click-to-select category
+  dial. Drives the same state as a hidden native `<select aria-label="Category">` (kept
+  `sr-only` for test + screen-reader compatibility). Shows tick marks, a rotating knob
+  with a glowing cyan notch, and compact code buttons for quick access.
+- `components/AnalogGauge.tsx` — canvas-based gauge with spring-physics needle sweep,
+  active cyan arc, 20 tick marks, amber needle, and pivot. Animates via
+  `requestAnimationFrame` with `useRef` for physics state.
+- `components/ConverterForm.tsx` added:
+  - **Tactile keypad** (0-9, ., CLR, DEL, +/-) and a **SWAP** button (swap from/to units).
+  - **AnalogGauge** result display with amber readout.
+- `vitest.setup.ts` — canvas `getContext` mock for jsdom test compatibility.
+
 ### Why the approach was chosen
 
 - The user supplied a full interactive prototype and approved the instrument-cluster
