@@ -132,5 +132,5 @@ export default function AnalogGauge({ normalized }: AnalogGaugeProps) {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  return <canvas ref={canvasRef} className="h-52 w-full" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="h-36 w-full" aria-hidden="true" />;
 }
