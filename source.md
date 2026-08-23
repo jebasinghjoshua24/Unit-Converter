@@ -10,6 +10,9 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ### What changed
 
+- `README.md` — rewrote from create-next-app boilerplate to full project documentation
+  (features, architecture, setup, scripts, tests, API, project structure).
+
 - Redesigned the entire UI as a **dark tactical instrument panel** (approved direction
   based on the "Night Instrument Cluster" prototype):
   - `app/globals.css` — full instrument theme: palette (`panel-dark`, `panel-card`,
