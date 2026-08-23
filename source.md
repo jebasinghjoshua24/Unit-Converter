@@ -4,6 +4,60 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 9 — Instrument Panel UI (visual redesign)
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Redesigned the entire UI as a **dark tactical instrument panel** (approved direction
+  based on the "Night Instrument Cluster" prototype):
+  - `app/globals.css` — full instrument theme: palette (`panel-dark`, `panel-card`,
+    `panel-housing`, `panel-inner`, `panel-bevel`, `cyan-glow`, `amber-glow`,
+    `hazard-red`, `status-green`), CRT scanlines, screw-head corners, recessed panels,
+    housing bevels, glow text, keypad/hazard switch button styles, custom scrollbar,
+    instrument-styled native selects, LCD input.
+  - `app/layout.tsx` — added Orbitron, Share Tech Mono, VT323 fonts; dark panel body.
+  - `app/page.tsx` — instrument workspace: telemetry header (SYS.READY, VOLT/FREQ/STATUS),
+    main, system footer.
+  - `components/CategoryConverter.tsx` — category select wrapped in a beveled panel
+    with glowing active-category readout.
+  - `components/UnitSelect.tsx` — unit dropdown styled as an instrument control.
+  - `components/ConverterForm.tsx` — LCD value input with scanlines, dual unit banks,
+    hazard "ENGAGE CONVERT" switch, amber analog-gauge result readout.
+  - `components/dimensions/DimensionsConverter.tsx` — nested selector in a beveled panel.
+
+### Why the approach was chosen
+
+- The user supplied a full interactive prototype and approved the instrument-cluster
+  aesthetic: dark, mechanical, precise, with glowing readouts and tactile controls.
+- **All form controls remain native** (`<select>`, `<input>`, `<button>`) with the same
+  aria-labels and option names, so the entire test suite (140 tests) stays green —
+  the redesign is purely visual plus the page shell.
+
+### Real-world example
+
+User opens the app → sees a dark instrument panel with a telemetry header (SYS.READY).
+Selects "Length" in the category panel, types `5` into the glowing LCD input, picks
+Meter → Foot, presses "ENGAGE CONVERT" (the hazard switch sinks on click), and the
+amber readout shows **`16.404199 ft`**.
+
+### Functions
+
+- `CategoryConverter`, `UnitSelect`, `ConverterForm`, `DimensionsConverter` — unchanged
+  logic; only styling/markup wrapper changed.
+- New CSS utility classes in `globals.css`: `screw-head`, `scanlines`, `recessed-panel`,
+  `housing-bevel`, `text-glow-*`, `pulse-led`, `instrument-select`, `lcd-input`,
+  `key-btn`, `hazard-btn`.
+
+### Detector note
+
+Impeccable detector flagged the faint grid background as advisory. Kept deliberately:
+an instrument panel is a measurement surface, the intended exception in the detector's
+own rule, and the grid is a committed part of the approved direction.
+
+---
+
 ## Exchange 8 — Currency conversion (first DB-backed category)
 
 **Date:** 2026-08-23

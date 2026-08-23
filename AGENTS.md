@@ -105,6 +105,18 @@ Every file has exactly one clear purpose. The rules:
   (`.agents/skills/vercel-react-best-practices/AGENTS.md`): no barrel imports, parallel
   fetches, derive state during render, functional setState, etc.
 
+### 3.5 Visual identity — "Instrument Panel"
+
+The UI is a dark tactical **instrumentation panel** (theme tokens + utilities in
+`app/globals.css`): CRT scanlines, screw-head corners, recessed beveled panels, glowing
+cyan/amber readouts, and a hazard-switch convert button. Fonts: Orbitron (display),
+Share Tech Mono (labels/body), VT323 (LCD digits).
+
+- All form controls remain **native** (`<select>`, `<input>`, `<button>`) with stable
+  aria-labels, so styling can change freely without breaking component tests.
+- The faint grid background is deliberate — a measurement surface — and is the one
+  detector-advisory that is kept by design.
+
 ## 4. Folder Structure
 
 ```
