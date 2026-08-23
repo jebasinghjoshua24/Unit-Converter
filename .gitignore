@@ -5,6 +5,7 @@
 
 # agent skills (installed locally, not project code)
 /.agents/
+/skills-lock.json
 /.pnp
 .pnp.*
 .yarn/*
