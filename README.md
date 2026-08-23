@@ -5,6 +5,12 @@ tactile **instrumentation panel**: recessed beveled panels, CRT scanlines, glowi
 cyan/amber readouts, a rotary category dial, a tactile keypad, and an analog gauge that
 sweeps to your answer.
 
+![Desktop](public/screenshots/desktop.png)
+*Desktop view — rotary dial on the left, converter form with LCD input, unit banks, and gauge on the right.*
+
+![Mobile](public/screenshots/mobile.png)
+*Mobile view — single-column stacked layout.*
+
 ## Features
 
 | Category     | Units                                                        |
