@@ -99,6 +99,26 @@ describe('POST /api/convert', () => {
     expect(res.body.value).toBeCloseTo(-273.15, 3)
   })
 
+  it('converts 1 square meter to square feet', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 1, from: 'square-meter', to: 'square-foot' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('ft²')
+    expect(res.body.value).toBeCloseTo(10.7639, 3)
+  })
+
+  it('converts 1 gallon to liters', async () => {
+    const app = createApp()
+    const res = await request(app)
+      .post('/api/convert')
+      .send({ value: 1, from: 'gallon', to: 'liter' })
+    expect(res.status).toBe(200)
+    expect(res.body.unit).toBe('L')
+    expect(res.body.value).toBeCloseTo(3.7854, 3)
+  })
+
   it('returns 400 for a missing field', async () => {
     const app = createApp()
     const res = await request(app).post('/api/convert').send({ value: 5, from: 'meter' })

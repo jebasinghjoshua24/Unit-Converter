@@ -28,12 +28,13 @@ describe('CategoryConverter', () => {
     cleanup()
   })
 
-  it('renders a category dropdown with Length, Mass, and Temperature options', () => {
+  it('renders a category dropdown with Length, Mass, Temperature, and Dimensions options', () => {
     render(<CategoryConverter />)
     const select = screen.getByLabelText(/category/i)
     expect(within(select).getByRole('option', { name: 'Length' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Mass' })).toBeInTheDocument()
     expect(within(select).getByRole('option', { name: 'Temperature' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: 'Dimensions' })).toBeInTheDocument()
   })
 
   it('defaults to the Length converter', () => {
@@ -56,6 +57,13 @@ describe('CategoryConverter', () => {
     const fromSelect = screen.getByLabelText(/from unit/i)
     expect(fromSelect.querySelectorAll('option')).toHaveLength(3)
     expect(within(fromSelect).getByRole('option', { name: 'Celsius' })).toBeInTheDocument()
+  })
+
+  it('switches to the Dimensions converter when Dimensions is selected', () => {
+    render(<CategoryConverter />)
+    fireEvent.change(screen.getByLabelText(/category/i), { target: { value: 'dimensions' } })
+    const dimensionSelect = screen.getByLabelText(/dimension/i)
+    expect(within(dimensionSelect).getByRole('option', { name: 'Area' })).toBeInTheDocument()
   })
 
   it('switches back to the Length converter', () => {

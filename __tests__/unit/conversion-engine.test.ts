@@ -225,3 +225,69 @@ describe('conversion engine — temperature category (offset)', () => {
     })
   })
 })
+
+describe('conversion engine — area category', () => {
+  describe('convert', () => {
+    it('converts 1 square meter to ~10.7639 square feet', () => {
+      expect(convert(1, 'square-meter', 'square-foot')).toBeCloseTo(10.7639, 3)
+    })
+
+    it('converts 1 acre to ~4046.856 square meters', () => {
+      expect(convert(1, 'acre', 'square-meter')).toBeCloseTo(4046.856, 2)
+    })
+
+    it('converts 1 square mile to ~640 acres', () => {
+      expect(convert(1, 'square-mile', 'acre')).toBeCloseTo(640, 4)
+    })
+
+    it('returns identity when source and target are the same', () => {
+      expect(convert(25, 'square-foot', 'square-foot')).toBe(25)
+    })
+  })
+
+  describe('listUnits', () => {
+    it('returns all 9 area units', () => {
+      const units = listUnits('area')
+      expect(units).toHaveLength(9)
+    })
+  })
+})
+
+describe('conversion engine — volume category', () => {
+  describe('convert', () => {
+    it('converts 1 gallon to ~3.7854 liters', () => {
+      expect(convert(1, 'gallon', 'liter')).toBeCloseTo(3.7854, 3)
+    })
+
+    it('converts 1 liter to 1000 milliliters', () => {
+      expect(convert(1, 'liter', 'milliliter')).toBeCloseTo(1000, 4)
+    })
+
+    it('converts 1 cubic meter to 1000 liters', () => {
+      expect(convert(1, 'cubic-meter', 'liter')).toBeCloseTo(1000, 4)
+    })
+
+    it('converts 16 fluid ounces to 1 US pint', () => {
+      expect(convert(16, 'fluid-ounce', 'pint')).toBeCloseTo(1, 4)
+    })
+
+    it('returns identity when source and target are the same', () => {
+      expect(convert(2.5, 'liter', 'liter')).toBe(2.5)
+    })
+  })
+
+  describe('listUnits', () => {
+    it('returns all 9 volume units', () => {
+      const units = listUnits('volume')
+      expect(units).toHaveLength(9)
+    })
+  })
+})
+
+describe('conversion engine — combined dimensions categories', () => {
+  it('lists both area and volume categories', () => {
+    const categories: Category[] = listCategories()
+    expect(categories).toContain('area')
+    expect(categories).toContain('volume')
+  })
+})
