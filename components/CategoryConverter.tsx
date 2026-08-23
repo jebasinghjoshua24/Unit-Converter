@@ -31,19 +31,19 @@ export default function CategoryConverter() {
   return (
     <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-start">
       {/* Rotary category selector — left column on desktop */}
-      <div className="w-full shrink-0 lg:w-80">
-        <div className="housing-bevel scanlines relative overflow-hidden rounded-lg p-3">
+      <div className="w-full shrink-0 lg:w-[20rem]">
+        <div className="housing-bevel scanlines relative overflow-hidden rounded-lg p-4">
           <div className="screw-head absolute left-2 top-2" />
           <div className="screw-head absolute right-2 top-2" />
           <div className="screw-head absolute bottom-2 left-2" />
           <div className="screw-head absolute bottom-2 right-2" />
 
           <div className="mb-1 flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan-glow shadow-[0_0_6px_#00f3ff]" />
+            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-slate-400">
+              <span className="inline-block h-2 w-2 rounded-full bg-cyan-glow shadow-[0_0_6px_#00f3ff]" />
               CATEGORY
             </span>
-            <span className="font-mono text-[9px] text-slate-500">DRAG · SCROLL · CLICK</span>
+            <span className="font-mono text-[10px] text-slate-500">DRAG · SCROLL · CLICK</span>
           </div>
 
           <RotaryDial
@@ -54,7 +54,7 @@ export default function CategoryConverter() {
         </div>
       </div>
 
-      {/* Active converter — right column on desktop */}
+      {/* Active converter — fills remaining space on desktop */}
       <div className="min-w-0 flex-1">
         {CATEGORIES.find((c) => c.id === category)?.component}
       </div>

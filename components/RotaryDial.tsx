@@ -96,7 +96,7 @@ export default function RotaryDial({ items, value, onChange }: RotaryDialProps) 
       </select>
 
       {/* Dial face */}
-      <div className="relative my-1 flex h-44 w-44 items-center justify-center select-none">
+      <div className="relative my-2 flex h-64 w-64 items-center justify-center select-none">
         {/* Outer metallic bevel ring */}
         <div className="absolute inset-0 rounded-full border-4 border-slate-800 bg-gradient-to-b from-slate-900 to-black shadow-[inset_0_4px_8px_rgba(0,0,0,0.8),0_4px_12px_rgba(0,0,0,0.6)]" />
 
@@ -132,30 +132,30 @@ export default function RotaryDial({ items, value, onChange }: RotaryDialProps) 
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
           onWheel={handleWheel}
-          className="relative flex h-28 w-28 cursor-grab touch-none items-center justify-center rounded-full border-2 border-slate-700 bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-[0_6px_16px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.15)] transition-transform duration-300 ease-out"
+          className="relative flex h-40 w-40 cursor-grab touch-none items-center justify-center rounded-full border-2 border-slate-700 bg-gradient-to-br from-slate-800 via-slate-900 to-black shadow-[0_6px_16px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.15)] transition-transform duration-300 ease-out"
           style={{ transform: `rotate(${rotation}deg)` }}
         >
           {/* textured grip */}
-          <div className="absolute inset-1.5 rounded-full border border-slate-700/50 opacity-40 [background-image:radial-gradient(#1e293b_1px,transparent_1px)] [background-size:6px_6px]" />
+          <div className="absolute inset-2 rounded-full border border-slate-700/50 opacity-40 [background-image:radial-gradient(#1e293b_1px,transparent_1px)] [background-size:8px_8px]" />
 
           {/* center cap */}
-          <div className="relative flex h-14 w-14 flex-col items-center justify-center rounded-full border border-slate-700/80 bg-gradient-to-tr from-slate-950 via-slate-900 to-slate-800 shadow-inner">
-            <div className="absolute top-1 h-3 w-1.5 rounded-full bg-cyan-glow shadow-[0_0_8px_#00f3ff]" />
-            <span className="mt-2 font-mono text-[8px] font-bold text-slate-500">MODE</span>
+          <div className="relative flex h-20 w-20 flex-col items-center justify-center rounded-full border border-slate-700/80 bg-gradient-to-tr from-slate-950 via-slate-900 to-slate-800 shadow-inner">
+            <div className="absolute top-1.5 h-5 w-2 rounded-full bg-cyan-glow shadow-[0_0_8px_#00f3ff]" />
+            <span className="mt-3 font-mono text-[10px] font-bold text-slate-500">MODE</span>
           </div>
         </div>
       </div>
 
       {/* Active category readout */}
       <div className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-cyan-glow shadow-[0_0_8px_#00f3ff] pulse-led" />
-        <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-cyan-glow text-glow-cyan">
+        <span className="h-2 w-2 rounded-full bg-cyan-glow shadow-[0_0_8px_#00f3ff] pulse-led" />
+        <span className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-glow text-glow-cyan">
           {activeItem?.label}
         </span>
       </div>
 
       {/* Quick access chips */}
-      <div className="grid w-full grid-cols-5 gap-1">
+      <div className="grid w-full grid-cols-5 gap-1.5">
         {items.map((item, i) => {
           const isActive = i === activeIndex;
           return (
@@ -164,7 +164,7 @@ export default function RotaryDial({ items, value, onChange }: RotaryDialProps) 
               type="button"
               onClick={() => onChange(item.id)}
               className={
-                "truncate rounded border px-0.5 py-1 text-center font-mono text-[9px] transition " +
+                "truncate rounded border px-1 py-1 text-center font-mono text-[10px] transition " +
                 (isActive
                   ? "border-cyan-glow/80 bg-cyan-950 font-bold text-cyan-glow shadow-[0_0_8px_rgba(0,243,255,0.3)]"
                   : "border-slate-800 bg-slate-900/80 text-slate-400 hover:text-slate-200")
