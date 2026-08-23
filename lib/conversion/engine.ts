@@ -2,6 +2,7 @@ import { registry } from './registry'
 import type { Category, Unit, UnitId } from '../../types/conversion'
 
 const unitById = new Map<string, Unit>()
+const currencyUnitIds = new Set<string>(registry.currency.map((u) => u.id))
 
 for (const units of Object.values(registry)) {
   for (const unit of units) {
@@ -21,7 +22,14 @@ export function getUnit(unitId: UnitId): Unit {
   return lookupUnit(unitId)
 }
 
+export function isCurrencyUnit(unitId: UnitId): boolean {
+  return currencyUnitIds.has(unitId)
+}
+
 export function convert(value: number, from: UnitId, to: UnitId): number {
+  if (isCurrencyUnit(from) || isCurrencyUnit(to)) {
+    throw new Error('Currency conversion requires live rates')
+  }
   const fromUnit = lookupUnit(from)
   const toUnit = lookupUnit(to)
   const baseValue = value * fromUnit.factor + (fromUnit.offset ?? 0)

@@ -8,6 +8,7 @@ export type Category =
   | 'speed'
   | 'energy'
   | 'pressure'
+  | 'currency'
 
 export type LengthUnitId =
   | 'millimeter'
@@ -72,6 +73,16 @@ export type EnergyUnitId =
 
 export type PressureUnitId = 'pascal' | 'kilopascal' | 'bar' | 'atmosphere' | 'mmhg' | 'psi'
 
+export type CurrencyUnitId =
+  | 'usd'
+  | 'eur'
+  | 'gbp'
+  | 'jpy'
+  | 'inr'
+  | 'cad'
+  | 'aud'
+  | 'chf'
+
 export type UnitId =
   | LengthUnitId
   | MassUnitId
@@ -82,6 +93,7 @@ export type UnitId =
   | SpeedUnitId
   | EnergyUnitId
   | PressureUnitId
+  | CurrencyUnitId
 
 export interface Unit {
   id: UnitId

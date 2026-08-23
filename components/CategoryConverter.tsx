@@ -9,6 +9,7 @@ import TimeConverter from "./time/TimeConverter";
 import SpeedConverter from "./speed/SpeedConverter";
 import EnergyConverter from "./energy/EnergyConverter";
 import PressureConverter from "./pressure/PressureConverter";
+import CurrencyConverter from "./currency/CurrencyConverter";
 import type { Category } from "@/types/conversion";
 
 const CATEGORIES: { id: Category | 'dimensions'; label: string; component: ReactNode }[] = [
@@ -20,6 +21,7 @@ const CATEGORIES: { id: Category | 'dimensions'; label: string; component: React
   { id: "speed", label: "Speed", component: <SpeedConverter /> },
   { id: "energy", label: "Energy", component: <EnergyConverter /> },
   { id: "pressure", label: "Pressure", component: <PressureConverter /> },
+  { id: "currency", label: "Currency", component: <CurrencyConverter /> },
 ];
 
 export default function CategoryConverter() {

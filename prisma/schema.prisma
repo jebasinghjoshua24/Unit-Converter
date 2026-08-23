@@ -4,13 +4,12 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Unit {
   id              String             @id @default(cuid())
   name            String
-  symbol          String
+  symbol          String             @unique
   category        UnitCategory
   description     String?
   rate            Float?             // exchange rate relative to category base unit (currency)

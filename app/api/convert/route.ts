@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
-import { convert, getUnit } from '@/lib/conversion/engine'
-import type { ConvertRequest, ConvertResult } from '@/types/conversion'
+import { convert, getUnit, isCurrencyUnit } from '@/lib/conversion/engine'
+import { convertCurrencyWithDb } from '@/lib/conversion/currency'
+import type { ConvertRequest, ConvertResult, CurrencyUnitId } from '@/types/conversion'
 
 interface ConvertRequestBody {
   value?: unknown
@@ -39,10 +40,20 @@ export async function POST(request: Request) {
     return errorResponse('Request must include a numeric value and non-empty from/to units', 400)
   }
 
+  const isCurrencyPair = isCurrencyUnit(body.from) && isCurrencyUnit(body.to)
+
   let result: number
   let targetSymbol: string
   try {
-    result = convert(body.value, body.from, body.to)
+    if (isCurrencyPair) {
+      result = await convertCurrencyWithDb(
+        body.value,
+        body.from as CurrencyUnitId,
+        body.to as CurrencyUnitId,
+      )
+    } else {
+      result = convert(body.value, body.from, body.to)
+    }
     targetSymbol = getUnit(body.to).symbol
   } catch {
     return errorResponse('Unknown unit', 400)

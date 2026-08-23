@@ -9,6 +9,7 @@ const TIME_BASE_UNIT = 'second'
 const SPEED_BASE_UNIT = 'ms'
 const ENERGY_BASE_UNIT = 'joule'
 const PRESSURE_BASE_UNIT = 'pascal'
+const CURRENCY_BASE_UNIT = 'usd'
 
 export const lengthUnits: Unit[] = [
   { id: 'millimeter', name: 'Millimeter', symbol: 'mm', factor: 0.001 },
@@ -96,6 +97,19 @@ export const pressureUnits: Unit[] = [
   { id: 'psi', name: 'Pound per Square Inch', symbol: 'psi', factor: 6894.757 },
 ]
 
+// Currency metadata only — factors are placeholders. Live rates come from the DB
+// (see lib/conversion/currency.ts). Static convert() refuses currency units.
+export const currencyUnits: Unit[] = [
+  { id: 'usd', name: 'US Dollar', symbol: 'USD', factor: 1 },
+  { id: 'eur', name: 'Euro', symbol: 'EUR', factor: 1 },
+  { id: 'gbp', name: 'British Pound', symbol: 'GBP', factor: 1 },
+  { id: 'jpy', name: 'Japanese Yen', symbol: 'JPY', factor: 1 },
+  { id: 'inr', name: 'Indian Rupee', symbol: 'INR', factor: 1 },
+  { id: 'cad', name: 'Canadian Dollar', symbol: 'CAD', factor: 1 },
+  { id: 'aud', name: 'Australian Dollar', symbol: 'AUD', factor: 1 },
+  { id: 'chf', name: 'Swiss Franc', symbol: 'CHF', factor: 1 },
+]
+
 export const registry: Record<Category, Unit[]> = {
   length: lengthUnits,
   mass: massUnits,
@@ -106,6 +120,7 @@ export const registry: Record<Category, Unit[]> = {
   speed: speedUnits,
   energy: energyUnits,
   pressure: pressureUnits,
+  currency: currencyUnits,
 }
 
 export function getBaseUnit(category: Category): string {
@@ -135,6 +150,9 @@ export function getBaseUnit(category: Category): string {
   }
   if (category === 'pressure') {
     return PRESSURE_BASE_UNIT
+  }
+  if (category === 'currency') {
+    return CURRENCY_BASE_UNIT
   }
   throw new Error(`Unknown category: ${category}`)
 }

@@ -2,24 +2,31 @@ import { describe, expect, it, vi } from 'vitest'
 import request from 'supertest'
 import { createServer } from 'node:http'
 
-vi.mock('@/lib/conversion/currency', () => ({
-  convertCurrency: (value: number, fromRate: number, toRate: number) =>
-    (value * toRate) / fromRate,
-  getCurrencyRates: vi.fn(() =>
-    Promise.resolve(
-      new Map([
-        ['usd', 1],
-        ['eur', 0.92],
-        ['gbp', 0.79],
-        ['jpy', 149],
-        ['inr', 83.3],
-        ['cad', 1.36],
-        ['aud', 1.52],
-        ['chf', 0.88],
-      ]),
-    ),
-  ),
-}))
+vi.mock('@/lib/conversion/currency', () => {
+  const rates = new Map<string, number>([
+    ['usd', 1],
+    ['eur', 0.92],
+    ['gbp', 0.79],
+    ['jpy', 149],
+    ['inr', 83.3],
+    ['cad', 1.36],
+    ['aud', 1.52],
+    ['chf', 0.88],
+  ])
+  return {
+    convertCurrency: (value: number, fromRate: number, toRate: number) =>
+      (value * toRate) / fromRate,
+    getCurrencyRates: vi.fn(() => Promise.resolve(rates)),
+    convertCurrencyWithDb: vi.fn((value: number, from: string, to: string) => {
+      const fromRate = rates.get(from)
+      const toRate = rates.get(to)
+      if (fromRate == null || toRate == null) {
+        return Promise.reject(new Error('Missing currency rate'))
+      }
+      return Promise.resolve((value * toRate) / fromRate)
+    }),
+  }
+})
 
 import { POST } from '../../app/api/convert/route'
 
@@ -79,13 +86,13 @@ describe('POST /api/convert — currency (DB-backed rates)', () => {
     expect(res.body.value).toBeCloseTo(6.7114, 3)
   })
 
-  it('converts 50 GBP to ~57.85 EUR', async () => {
+  it('converts 50 GBP to ~58.23 EUR', async () => {
     const app = createApp()
     const res = await request(app)
       .post('/api/convert')
       .send({ value: 50, from: 'gbp', to: 'eur' })
     expect(res.status).toBe(200)
     expect(res.body.unit).toBe('EUR')
-    expect(res.body.value).toBeCloseTo(57.85, 2)
+    expect(res.body.value).toBeCloseTo(58.23, 2)
   })
 })
