@@ -34,6 +34,10 @@ Chronological log of every exchange on this project. Newest entries first.
     selects, convert button, result/error display; calls `/api/convert`.
   - `app/page.tsx` — landing page now renders `LengthConverter`.
   - `__tests__/components/page-smoke.test.tsx` — updated heading assertion.
+- Added Husky git hooks:
+  - `package.json` — added `prepare: "husky"` script and `husky` dev dependency.
+  - `.husky/pre-commit` — runs `npm run test:run && npm run lint`.
+  - `.husky/pre-push` — runs `npm run test:run && npm run lint` (quality gate on push).
 
 ### Why the approach was chosen
 

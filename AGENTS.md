@@ -144,6 +144,17 @@ AGENTS.md                   # This file
 > **Note:** async Server Components are not yet supported by Vitest. Unit-test
 > synchronous components; use E2E (Playwright/Cypress, not yet configured) for async ones.
 
+### 5.3 Git hooks (Husky)
+
+Husky runs quality gates automatically:
+
+- **pre-commit:** `npm run test:run && npm run lint`
+- **pre-push:** `npm run test:run && npm run lint`
+
+No code can be committed or pushed while the suite is red. Hooks live in `.husky/`
+and are installed on `npm install` via the `prepare` script. On Windows, Husky uses
+the `bash.exe` bundled with Git for Windows (not WSL).
+
 ## 6. Feature Workflow (repeat for every new category)
 
 Follow this exact sequence, one category at a time:
