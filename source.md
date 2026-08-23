@@ -4,6 +4,64 @@ Chronological log of every exchange on this project. Newest entries first.
 
 ---
 
+## Exchange 3 — Mass conversion feature (TDD: red → green)
+
+**Date:** 2026-08-23
+
+### What changed
+
+- Recorded feature analysis in `docs/feature-mass.md`: 7 mass units (mg→st), all
+  static factors relative to kilogram.
+- Wrote failing tests first (red, committed as `be18883`):
+  - Added 12 mass-specific tests to `__tests__/unit/conversion-engine.test.ts`
+    (convert, listCategories, listUnits, getUnit).
+  - Added 2 mass integration tests to `__tests__/integration/api-convert.test.ts`
+    (pound→kg, tonne→lb).
+  - New `__tests__/components/mass-converter.test.tsx` — 4 UI tests.
+- Implemented the feature (green, committed as `85182e5`):
+  - `types/conversion.ts` — added `Category: 'mass'`, `MassUnitId`, extended `UnitId`.
+  - `lib/conversion/registry.ts` — added `massUnits` (7 units) and registered in the
+    registry map.
+  - `lib/conversion/engine.ts` — added exported `getUnit(unitId)` for generic symbol
+    lookup (used by the API route).
+  - `app/api/convert/route.ts` — replaced length-specific `listUnits('length').find()`
+    with generic `getUnit(body.to)`, so any category works.
+  - `components/UnitSelect.tsx` — moved reusable dropdown to shared location.
+  - `components/ConverterForm.tsx` — extracted shared generic converter form (used by
+    both LengthConverter and MassConverter).
+  - `components/length/LengthConverter.tsx` — refactored to thin wrapper around
+    ConverterForm.
+  - `components/mass/MassConverter.tsx` — thin wrapper around ConverterForm with mass
+    units.
+  - `components/length/UnitSelect.tsx` — deleted (moved to shared).
+  - `app/page.tsx` — renders both Length and Mass converters side by side.
+
+### Why the approach was chosen
+
+- **Extracted `ConverterForm`:** Both converters had identical form logic. The shared
+  generic component accepts `units: Unit[]` as a prop, so future categories (temperature,
+  volume, ...) need only a thin wrapper + unit list.
+- **`getUnit` abstraction:** The API route no longer hardcodes `listUnits('length')` for
+  resolving the target symbol. `getUnit(unitId)` works across all categories.
+- **`UnitSelect` moved to shared location:** Was `components/length/UnitSelect.tsx`, now
+  `components/UnitSelect.tsx` — reusable by any category without cross-folder imports.
+
+### Real-world example
+
+User opens the app, enters `10` pounds → kilograms. The client POSTs
+`{ value: 10, from: "pound", to: "kilogram" }`; the engine computes
+`10 × 0.45359237 ÷ 1 = 4.5359237`; the UI shows **`4.535924 kg`**.
+
+### Functions
+
+- `getUnit(unitId: UnitId): Unit` — looks up a unit by id across all categories; throws
+  if unknown. Used by the route handler.
+- `ConverterForm` — generic client component: value input, two unit selects, convert
+  button, result/error display. Takes `units: Unit[]` as prop.
+- `MassConverter` — thin wrapper: `ConverterForm units={listUnits("mass")}`.
+
+---
+
 ## Exchange 2 — Length conversion feature (TDD: red → green)
 
 **Date:** 2026-08-23

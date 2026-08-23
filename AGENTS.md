@@ -24,7 +24,7 @@ target unit → get the converted value**.
 | Feature     | Status        |
 | ----------- | ------------- |
 | Length      | Implemented (first feature) |
-| Mass        | Not started   |
+| Mass        | Implemented   |
 | Temperature | Not started   |
 | Volume      | Not started   |
 | ...         | Not started   |
