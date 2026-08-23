@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import UnitSelect from "./UnitSelect";
+import AnalogGauge from "./AnalogGauge";
 import type { ConvertResult, Unit } from "@/types/conversion";
 
 interface ConverterFormProps {
   units: Unit[];
+}
+
+function normalizeToGauge(value: number): number {
+  if (value === 0) return 0;
+  const mag = Math.log10(Math.abs(value) + 1);
+  return Math.max(0.05, Math.min(0.95, mag / 4));
 }
 
 export default function ConverterForm({ units }: ConverterFormProps) {
@@ -15,6 +22,28 @@ export default function ConverterForm({ units }: ConverterFormProps) {
   const [result, setResult] = useState<ConvertResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConverting, setIsConverting] = useState(false);
+
+  function appendKey(key: string) {
+    if (key === "." && value.includes(".")) return;
+    setValue((prev) => (prev === "0" && key !== "." ? key : prev + key));
+  }
+
+  function clearKeypad() {
+    setValue("");
+  }
+
+  function backspaceKeypad() {
+    setValue((prev) => prev.slice(0, -1));
+  }
+
+  function invertSign() {
+    setValue((prev) => (prev.startsWith("-") ? prev.slice(1) : "-" + prev));
+  }
+
+  function swapUnits() {
+    setFrom(to);
+    setTo(from);
+  }
 
   async function handleConvert() {
     const numericValue = Number(value);
@@ -40,7 +69,8 @@ export default function ConverterForm({ units }: ConverterFormProps) {
         return;
       }
 
-      setResult(body as ConvertResult);
+      const converted = body as ConvertResult;
+      setResult(converted);
     } catch {
       setError("Something went wrong. Please try again.");
       setResult(null);
@@ -57,7 +87,7 @@ export default function ConverterForm({ units }: ConverterFormProps) {
         void handleConvert();
       }}
     >
-      {/* Digital LCD value input */}
+      {/* Digital LCD input + keypad */}
       <div className="housing-bevel relative overflow-hidden rounded-lg p-4">
         <div className="screw-head absolute left-2 top-2" />
         <div className="screw-head absolute right-2 top-2" />
@@ -86,6 +116,33 @@ export default function ConverterForm({ units }: ConverterFormProps) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
+        </div>
+
+        {/* Tactical keypad */}
+        <div className="mt-3 grid grid-cols-4 gap-2">
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("7")}>7</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("8")}>8</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("9")}>9</button>
+          <button type="button" className="key-btn rounded border-amber-800/40 bg-amber-950/20 py-2 font-mono text-sm font-bold text-amber-400 hover:bg-amber-900/30" onClick={clearKeypad}>CLR</button>
+
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("4")}>4</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("5")}>5</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("6")}>6</button>
+          <button type="button" className="key-btn rounded border-rose-800/40 bg-rose-950/20 py-2 font-mono text-sm font-bold text-rose-400 hover:bg-rose-900/30" onClick={backspaceKeypad}>DEL</button>
+
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("1")}>1</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("2")}>2</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("3")}>3</button>
+          <button type="button" className="key-btn rounded border-cyan-800/40 bg-cyan-950/20 py-2 font-mono text-sm font-bold text-cyan-glow hover:bg-cyan-900/30" onClick={invertSign}>+/-</button>
+
+          <button type="button" className="key-btn col-span-2 rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey("0")}>0</button>
+          <button type="button" className="key-btn rounded py-2 font-mono text-lg font-bold text-slate-200" onClick={() => appendKey(".")}>.</button>
+          <button type="button" className="key-btn flex items-center justify-center gap-1 rounded border-cyan-700/50 bg-cyan-950/30 py-2 font-mono text-xs font-bold text-cyan-glow" onClick={swapUnits}>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+            </svg>
+            SWAP
+          </button>
         </div>
       </div>
 
@@ -116,9 +173,7 @@ export default function ConverterForm({ units }: ConverterFormProps) {
         >
           <span className="absolute inset-0 rounded-lg border border-cyan-glow/40 transition-colors group-hover:border-cyan-glow" />
           <span className="h-3 w-3 rounded-full bg-hazard-red shadow-[0_0_10px_#ff3344] transition-transform group-hover:scale-125" />
-          <span className="text-glow-cyan">
-            {isConverting ? "CONVERTING..." : "ENGAGE CONVERT"}
-          </span>
+          <span className="text-glow-cyan">{isConverting ? "CONVERTING..." : "ENGAGE CONVERT"}</span>
         </button>
       </div>
 
@@ -132,28 +187,28 @@ export default function ConverterForm({ units }: ConverterFormProps) {
       ) : null}
 
       {/* Analog gauge result */}
-      {result ? (
-        <div className="housing-bevel scanlines relative overflow-hidden rounded-lg p-4 text-center">
-          <div className="screw-head absolute left-2 top-2" />
-          <div className="screw-head absolute right-2 top-2" />
-          <div className="screw-head absolute bottom-2 left-2" />
-          <div className="screw-head absolute bottom-2 right-2" />
+      <div className="housing-bevel scanlines relative overflow-hidden rounded-lg p-4 text-center">
+        <div className="screw-head absolute left-2 top-2" />
+        <div className="screw-head absolute right-2 top-2" />
+        <div className="screw-head absolute bottom-2 left-2" />
+        <div className="screw-head absolute bottom-2 right-2" />
 
-          <div className="mb-1 flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-slate-400">
-              <span className="inline-block h-2 w-2 rounded-full bg-hazard-red shadow-[0_0_6px_#ff3344]" />
-              ANALOG INSTRUMENT READOUT
-            </span>
-            <span className="font-mono text-xs text-slate-500">INERTIA DAMPED</span>
-          </div>
-
-          <div className="mx-auto min-w-[200px] max-w-sm rounded-lg border border-amber-glow/30 bg-slate-950/80 px-6 py-3 shadow-[0_0_15px_rgba(255,170,0,0.15)]">
-            <output className="font-orbitron text-3xl font-black tracking-wider text-amber-glow text-glow-amber">
-              {formatResult(result.value)} {result.unit}
-            </output>
-          </div>
+        <div className="mb-1 flex items-center justify-between">
+          <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-slate-400">
+            <span className="inline-block h-2 w-2 rounded-full bg-hazard-red shadow-[0_0_6px_#ff3344]" />
+            ANALOG INSTRUMENT READOUT
+          </span>
+          <span className="font-mono text-xs text-slate-500">INERTIA DAMPED</span>
         </div>
-      ) : null}
+
+        <AnalogGauge normalized={result ? normalizeToGauge(result.value) : 0} />
+
+        <div className="mx-auto min-w-[200px] max-w-sm rounded-lg border border-amber-glow/30 bg-slate-950/80 px-6 py-3 shadow-[0_0_15px_rgba(255,170,0,0.15)]">
+          <output className="font-orbitron text-3xl font-black tracking-wider text-amber-glow text-glow-amber">
+            {result ? `${formatResult(result.value)} ${result.unit}` : "--.--"}
+          </output>
+        </div>
+      </div>
     </form>
   );
 }
